@@ -45,6 +45,11 @@ func main() {
 	if err := svc.EnsureSystemChannelModels(); err != nil {
 		log.Fatal(err)
 	}
+	// 按环境变量预置系统渠道（例如 Gemini 文本/图片、xAI Grok 视频）；未配置对应密钥时自动跳过，
+	// 已存在同名渠道也会跳过，不会覆盖后台的手工修改。详见 channel_seed.go。
+	if err := svc.EnsureSeedSystemChannels(); err != nil {
+		log.Printf("seed system channels skipped after error: %v", err)
+	}
 	if err := svc.EnsureDefaultStoryboardPromptTemplate(); err != nil {
 		log.Fatal(err)
 	}
